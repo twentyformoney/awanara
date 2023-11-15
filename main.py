@@ -22,6 +22,7 @@ class Window(QWidget):
         button1.setMaximumSize(1000,1000)
         button1.setIcon(QIcon('./asset/svg/home.svg'))
         button2.setIcon(QIcon('./asset/svg/search.svg'))
+        button3.setIcon(QIcon('./asset/svg/info.svg'))
         
         button2.setMaximumSize(1000,1000)
         button3.setMaximumSize(1000,1000)
