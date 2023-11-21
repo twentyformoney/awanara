@@ -45,7 +45,7 @@ def cek_waktu():
         return "image: url(:/images/malam.png)"
 def cekbg():
     if pagi:
-        return "border-image: url(:/images/bg3git.png)" 
+        return "border-image: url(:/images/bg1.png)" 
     if siang:
         return "background:url(:/images/bg1.png)"
     if malam:
@@ -53,7 +53,7 @@ def cekbg():
 bg = cekbg()  
 def cekbgicon():
     if pagi:
-        return "background:url(:/images/bg3.2.png);border-radius: 5px;"
+        return "background:url(:/images/bg2.png);border-radius: 5px;"
     if siang:
         return "background:url(:/images/bg2.png);border-radius: 5px;"
     if malam:
@@ -72,7 +72,6 @@ def ipInfo(addr=''):
     #will load the json response into data
     city = data['city']
     return city
-
 ipInfo()
 LokasiTerkini = bs(r,"xml")
 LokasiID =  ipInfo()
@@ -122,6 +121,40 @@ def ceksuhu():
     else:
         return th12
 pengecekansuhu = ceksuhu()
+def cekcuaca():
+    # Compare the current time with the defined ranges
+    if current_time >= pagi and current_time < siang:
+        return h0
+    elif current_time >= siang and current_time < sore:
+        return h6
+    elif current_time >= sore and current_time < malam:
+        return h12
+    else:
+        return h12
+pengecekancuaca = cekcuaca()
+def get_weather_saran():
+    if pengecekancuaca == 0 :
+        return "Saat ini Sangat Cerah! Sebaiknya Gunakan Kacamata"
+    elif pengecekancuaca == 1 or pengecekancuaca == 2 :
+        return "Sekarang adalah Waktu Yang Cocok Untuk Beraktivitas di Luar Ruangan"
+    elif pengecekancuaca == 3 or pengecekancuaca == 4 or pengecekancuaca == 5 :
+        return "Waspada Datangnya Hujan! Sebaiknya Sediakanlah Payung"
+    elif pengecekancuaca == 10 :
+        return "Saat ini Penuh Asap! Pakailah Masker"
+    elif pengecekancuaca == 45 :
+        return "Saat ini di Penuhi Dengan Kabut! Hati-hatilah Saat Berkendara"
+    elif pengecekancuaca == 60 :
+        return "Sekarang Sedang Hujan Ringan, Sebaiknya Gunakanlah Jas Hujan Atau Payung"
+    elif pengecekancuaca == 61 :
+        return "Saat ini Sedang Hujan Sedang, Gunakanlah Payung Atau Jas Hujan Saat Berpergian"
+    elif pengecekancuaca == 63 :
+        return "Sekarang Sedang Hujan Lebat! Sebaiknya Keluar Rumah Pada Saat Hujan Berhenti, Jika Sedang Berada di Luar maka Menepilah!"
+    elif pengecekancuaca == 80 :
+        return "Saat Ini Sedang Hujan, Pakailah Payung Atau Jas Hujan"
+    elif pengecekancuaca == 95 or pengecekancuaca == 97 :
+        return "Hati Hati Sekarang Sedang Terjadi Hujan Petir, Tetaplah di Dalam Rumah! Jika Berada di Luar Maka Segeralah Ke Dalam Ruangan"
+weather_kondisi = get_weather_saran()
+pengecekansuhu = cekcuaca()
 print(
     "AWANARA\n",
 	"--- Hari ini ---\n",
@@ -267,7 +300,7 @@ class Ui_Form(object):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Awanari"))
         self.suhu.setText(_translate("Form",f"{pengecekansuhu}℃"))
-        self.saran_teks.setText(_translate("Form", "                   SARAN #7195E7"))
+        self.saran_teks.setText(_translate("Form", f"{weather_kondisi}"))
         self.kelembapan.setText(_translate("Form", "Kelembapan"))
         self.lokasi.setText(_translate("Form", LokasiID))
         self.angin.setText(_translate("Form", "Angin"))
