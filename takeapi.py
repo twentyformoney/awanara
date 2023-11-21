@@ -131,8 +131,8 @@ def cekcuaca():
         return h12
     else:
         return h12
-pengecekancuaca = cekcuaca()
-def get_weather_saran():
+pengecekancuaca = int(cekcuaca())
+def get_weather_saran(pengecekancuaca):
     if pengecekancuaca == 0 :
         return "Saat ini Sangat Cerah! Sebaiknya Gunakan Kacamata"
     elif pengecekancuaca == 1 or pengecekancuaca == 2 :
@@ -153,8 +153,7 @@ def get_weather_saran():
         return "Saat Ini Sedang Hujan, Pakailah Payung Atau Jas Hujan"
     elif pengecekancuaca == 95 or pengecekancuaca == 97 :
         return "Hati Hati Sekarang Sedang Terjadi Hujan Petir, Tetaplah di Dalam Rumah! Jika Berada di Luar Maka Segeralah Ke Dalam Ruangan"
-weather_kondisi = get_weather_saran()
-pengecekansuhu = cekcuaca()
+weather_kondisi = get_weather_saran(pengecekancuaca)
 print(
     "AWANARA\n",
 	"--- Hari ini ---\n",
