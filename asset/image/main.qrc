@@ -1,0 +1,29 @@
+<RCC>
+  <qresource prefix="images">
+    <file>search white.png</file>
+    <file>bg3.3.png</file>
+    <file>awanari.png</file>
+    <file>bg2.3.png</file>
+    <file>uv.png</file>
+    <file>siang.png</file>
+    <file>bg0.jpg</file>
+    <file>bg1.2.png</file>
+    <file>bg1.png</file>
+    <file>bg2.2.png</file>
+    <file>bg2.png</file>
+    <file>bg3.2.png</file>
+    <file>bg3.png</file>
+    <file>angin.png</file>
+    <file>deras.png</file>
+    <file>gerimis.png</file>
+    <file>kadar-air.png</file>
+    <file>kadar-air2.png</file>
+    <file>malam-berawan.png</file>
+    <file>malam-hujan.png</file>
+    <file>malam.png</file>
+    <file>mendung.png</file>
+    <file>siang-berawan.png</file>
+    <file>siang-hujan.png</file>
+    <file>berawan.png</file>
+  </qresource>
+</RCC>
