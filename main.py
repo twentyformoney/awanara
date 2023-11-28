@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup as bs
 import requests
 from win10toast import ToastNotifier
 import time
+import threading
 lokasitempat = "KalimantanTimur"
 url = f"https://data.bmkg.go.id/DataMKG/MEWS/DigitalForecast/DigitalForecast-{lokasitempat}.xml"
 response = requests.get(url, verify=False)
@@ -37,27 +38,6 @@ sore = datetime.time(18, 0, 0)
 malam = datetime.time(21, 0, 0)
 
 
-def cekbg():
-    if current_time >= pagi and current_time < siang:
-       return "border-image: url(:/images/bg1.png)"
-    if current_time >= siang and current_time < sore:
-        return "background:url(:/images/bg1.png)"
-    if current_time >= sore and current_time < malam:
-        return "background:url(:/images/bg3.png)"
-    else:
-        return "background:url(:/images/bg3.png)"
-
-
-
-def cekbgicon():
-    if current_time >= pagi and current_time < siang:
-        return "background:url(:/images/bg2.png);border-radius: 5px;"
-    if current_time >= siang and current_time < sore:
-        return "background:url(:/images/bg2.png);border-radius: 5px;"
-    if current_time >= sore and current_time < malam:
-        return "background:url(:/images/bg3.2.png);border-radius: 5px;"
-    else:
-        return "background:url(:/images/bg3.2.png);border-radius: 5px;"
 
 
 def ipInfo(addr=''):
@@ -73,16 +53,33 @@ def ipInfo(addr=''):
     # will load the json response into data
     city = data['city']
     return city
-
-#variable 
-bg = cekbg()
-bgicon = cekbgicon()
 LokasiID = ipInfo()
 
 
 class cuaca_text():
     global h0,h6,h12,th0,th6,th12,ws0,ws6,ws12
     LokasiTerkini = bs(r, "xml")
+    def cekbg():
+        if current_time >= pagi and current_time < siang:
+            return "border-image: url(:/images/bg1.png)"
+        if current_time >= siang and current_time < sore:
+            return "background:url(:/images/bg1.png)"
+        if current_time >= sore and current_time < malam:
+            return "background:url(:/images/bg3.png)"
+        else:
+            return "background:url(:/images/bg3.png)"
+
+
+
+    def cekbgicon():
+        if current_time >= pagi and current_time < siang:
+            return "background:url(:/images/bg2.png);border-radius: 5px;"
+        if current_time >= siang and current_time < sore:
+            return "background:url(:/images/bg2.png);border-radius: 5px;"
+        if current_time >= sore and current_time < malam:
+            return "background:url(:/images/bg3.2.png);border-radius: 5px;"
+        else:
+            return "background:url(:/images/bg3.2.png);border-radius: 5px;"
     try:
         KotaCuaca = LokasiTerkini.find(description={LokasiID}).find(id="weather")
         h0 = KotaCuaca.find(h='0').value.string
@@ -263,16 +260,14 @@ class cuaca_text():
     )
 
 
+#variable 
+bg = cuaca_text.cekbg()
+bgicon = cuaca_text.cekbgicon()
 
 
 
-def pengulangan():
-    while datetime.datetime.now().minute % 5 != 0:
-        time.sleep(1)
-    cekcuaca()
-    while True:
-        time.sleep(300)
-        cekcuaca()
+
+
 def check_bad_weather():
         def send_notification(message):
             toaster = ToastNotifier()
@@ -283,7 +278,7 @@ def check_bad_weather():
             pass
 class Ui_Form(object):
     def setupUi(self, Form):
-    
+ 
         Form.setObjectName("Form")
         Form.resize(285, 525)
         Form.setFixedSize(QtCore.QSize(285, 525))
@@ -450,6 +445,7 @@ class Ui_Form(object):
         # Start the animation
         animation_group.setLoopCount(-1)
         animation_group.start()
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
@@ -457,6 +453,19 @@ if __name__ == "__main__":
     self = Ui_Form()
     self.setupUi(MainWindow)
     self.animate_widget()
-    check_bad_weather()
     MainWindow.show()
+    def pengulangan():
+        while True:
+            if app.instance() is not None:
+                time.sleep(3)
+                print("test")
+                cuaca_text()
+                check_bad_weather()
+            else:
+                print("instance not running")
+                thread.join()
+                sys.exit()
+    thread = threading.Thread(target=pengulangan)
+    thread.start()
     sys.exit(app.exec_())
+
