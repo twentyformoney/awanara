@@ -5,7 +5,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QPropertyAnimation, QPoint, QSequentialAnimationGroup
 from bs4 import BeautifulSoup as bs
 import requests
-import win10toast
+from win10toast import ToastNotifier
 import time
 lokasitempat = "KalimantanTimur"
 url = f"https://data.bmkg.go.id/DataMKG/MEWS/DigitalForecast/DigitalForecast-{lokasitempat}.xml"
@@ -235,9 +235,11 @@ class cuaca_text():
                     return "image: url(:/images/siang-hujan.png)"
                 if pengecekancuaca == 80 or pengecekancuaca == 95 or pengecekancuaca == 70:
                     return "image: url(:/images/siang-hujan.png)"
+                
+        
+
     except:
         print("Data Tidak Ditemukan") 
-    
     
     print(
         "AWANARA\n",
@@ -257,19 +259,9 @@ class cuaca_text():
         f"\nSuhu : {th12} "
         f"\nKecepatan Angin : {ws12} ",
     )
-    
 
 
 
-def send_notification(title, message):
-    toaster = win10toast.ToastNotifier()
-    toaster.show_toast(title, message, duration=10)
-    
-
-def check_bad_weather(city):
-
-    if pengecekancuaca >= 60:
-        send_notification(f"Cuaca sedang hujan di luar", {city})
 
 
 def pengulangan():
@@ -279,7 +271,14 @@ def pengulangan():
     while True:
         time.sleep(300)
         cekcuaca()
-
+def check_bad_weather():
+        def send_notification(message):
+            toaster = ToastNotifier()
+            toaster.show_toast(message, duration=10,threaded=True)
+        if pengecekancuaca >= 60:
+            send_notification(f"Cuaca sedang hujan di luar")
+        else:
+            pass
 class Ui_Form(object):
     def setupUi(self, Form):
     
@@ -456,5 +455,6 @@ if __name__ == "__main__":
     self = Ui_Form()
     self.setupUi(MainWindow)
     self.animate_widget()
+    check_bad_weather()
     MainWindow.show()
     sys.exit(app.exec_())
