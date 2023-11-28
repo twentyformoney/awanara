@@ -38,23 +38,25 @@ malam = datetime.time(21, 0, 0)
 
 
 def cekbg():
-    if pagi:
-        return "border-image: url(:/images/bg1.png)"
-    if siang:
+    if current_time >= pagi and current_time < siang:
+       return "border-image: url(:/images/bg1.png)"
+    if current_time >= siang and current_time < sore:
         return "background:url(:/images/bg1.png)"
-    if malam:
+    if current_time >= sore and current_time < malam:
+        return "background:url(:/images/bg3.png)"
+    else:
         return "background:url(:/images/bg3.png)"
 
 
 
-
-
 def cekbgicon():
-    if pagi:
+    if current_time >= pagi and current_time < siang:
         return "background:url(:/images/bg2.png);border-radius: 5px;"
-    if siang:
+    if current_time >= siang and current_time < sore:
         return "background:url(:/images/bg2.png);border-radius: 5px;"
-    if malam:
+    if current_time >= sore and current_time < malam:
+        return "background:url(:/images/bg3.2.png);border-radius: 5px;"
+    else:
         return "background:url(:/images/bg3.2.png);border-radius: 5px;"
 
 
