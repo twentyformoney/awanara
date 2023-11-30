@@ -9,8 +9,12 @@ from win10toast import ToastNotifier
 import time
 import threading
 lokasitempat = "KalimantanTimur"
+headers = requests.utils.default_headers()
+headers.update({
+    'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0',
+})
 url = f"https://data.bmkg.go.id/DataMKG/MEWS/DigitalForecast/DigitalForecast-{lokasitempat}.xml"
-response = requests.get(url, verify=False)
+response = requests.get(url,verify=True, headers=headers)
 r = response.text
 now = datetime.datetime.now()
 harini = now.strftime("%A, %B %Y")
@@ -59,6 +63,7 @@ LokasiID = ipInfo()
 class cuaca_text():
     global h0,h6,h12,th0,th6,th12,ws0,ws6,ws12
     LokasiTerkini = bs(r, "xml")
+    print(url)
     def cekbg():
         if current_time >= pagi and current_time < siang:
             return "border-image: url(:/images/bg1.png)"
@@ -91,6 +96,7 @@ class cuaca_text():
         prakiraan['Malam'] = kode[h12]
 
     except:
+        print(KotaCuaca)
         print("Data Tidak Ditemukan (Kota tidak tersedia)")
         quit()
     try:
@@ -273,7 +279,7 @@ def check_bad_weather():
             toaster = ToastNotifier()
             toaster.show_toast(message, duration=10,threaded=True)
         if pengecekancuaca >= 60:
-            send_notification(f"Cuaca sedang hujan di luar")
+            send_notification(f"Cuaca Di Luar Sedang Hujan, Siapkan Payung dan Jas Hujan")
         else:
             pass
 class Ui_Form(object):
@@ -457,8 +463,7 @@ if __name__ == "__main__":
     def pengulangan():
         while True:
             if app.instance() is not None:
-                time.sleep(3)
-                print("test")
+                time.sleep(300)
                 cuaca_text()
                 check_bad_weather()
             else:
